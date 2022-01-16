@@ -1,89 +1,81 @@
-import {Component, HostListener, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  Component,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 
-import {MoveChange, NgxChessBoardComponent, NgxChessBoardService, NgxChessBoardView} from 'ngx-chess-board';
-import {Router} from "@angular/router";
-
+import {
+  MoveChange,
+  NgxChessBoardComponent,
+  NgxChessBoardService,
+  NgxChessBoardView,
+} from 'ngx-chess-board';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
-  styleUrls: ['./board.component.css']
+  styleUrls: ['./board.component.css'],
 })
 export class BoardComponent implements OnInit {
-  @ViewChild('board', {static: false}) board: NgxChessBoardView | undefined;
-  @Input() lightDisabled = true
+  @ViewChild('board', { static: false }) board: NgxChessBoardView | undefined;
+  @Input() lightDisabled = true;
 
-  @Input() darkDisabled = true
-  @Input() reversed = false
-  @Input() shouldBeReversed = false
+  @Input() darkDisabled = true;
+  @Input() reversed = false;
+  @Input() shouldBeReversed = false;
 
-
-
-  checkIfCorrectlyReversed():void{
-    if((!this.reversed)&&this.shouldBeReversed){
-      if(this.board) {
-        this.board?.reverse()
-        this.reversed = true
+  checkIfCorrectlyReversed(): void {
+    if (!this.reversed && this.shouldBeReversed) {
+      if (this.board) {
+        this.board?.reverse();
+        this.reversed = true;
       }
     }
   }
-  sendMessage():void{
-    window?.top?.postMessage("hello","*")
-    this.board?.reverse()
 
-  }
-
-  sendBoardData(fen: string | undefined,move: MoveChange): void{
-    let sendTo = "white"
-    if(this.darkDisabled) {
-      sendTo="dark"
+  sendBoardData(fen: string | undefined, move: MoveChange): void {
+    let sendTo = 'white';
+    if (this.darkDisabled) {
+      sendTo = 'dark';
     }
-    window?.top?.postMessage({fen:fen,sendTo:sendTo,move:move})
+    window?.top?.postMessage({ fen: fen, sendTo: sendTo, move: move });
   }
-
 
   @HostListener('window:message', ['$event'])
   onMessage(event: any) {
-    if (event.origin !== origin){
+    if (event.origin !== origin) {
       return;
-
     }
-    if(event.data){
-      this.board?.move(event.data.move.move)
-
+    if (event.data) {
+      this.board?.move(event.data.move.move);
     }
   }
 
   public moveCallback(move: MoveChange): void {
     const fen = this.board?.getFEN();
-    this.sendBoardData(fen,move)
-
+    this.sendBoardData(fen, move);
   }
 
-
-
-  constructor(private ngxChessBoardService: NgxChessBoardService,private router: Router) { }
+  constructor(
+    private ngxChessBoardService: NgxChessBoardService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-      console.log(this.router)
-    if(this.router.url==="/single-board/dark"){
-      this.darkDisabled = false
-      this.shouldBeReversed = true
-
-    }else{
-      this.lightDisabled = false
-
+    console.log(this.router);
+    if (this.router.url === '/single-board/dark') {
+      this.darkDisabled = false;
+      this.shouldBeReversed = true;
+    } else {
+      this.lightDisabled = false;
     }
-
-
-
-
   }
 
-  ngAfterViewInit(){
-
-    this.checkIfCorrectlyReversed()
-
+  ngAfterViewInit() {
+    this.checkIfCorrectlyReversed();
   }
-
 }
