@@ -66,7 +66,6 @@ export class BoardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.router);
     if (this.router.url === '/single-board/dark') {
       this.darkDisabled = false;
       this.shouldBeReversed = true;
@@ -76,6 +75,15 @@ export class BoardComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    const currentFEN = localStorage.getItem('currentFEN');
+    if (typeof currentFEN === 'string') {
+      this.board?.setFEN(currentFEN);
+    }
     this.checkIfCorrectlyReversed();
+  }
+
+  @HostListener('window:beforeunload')
+  async ngOnDestroy() {
+    localStorage.setItem('currentFEN', <string>this.board?.getFEN());
   }
 }
