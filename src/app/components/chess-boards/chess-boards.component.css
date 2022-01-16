@@ -1,0 +1,17 @@
+.column {
+  float: left;
+  width: 50%;
+}
+.row:after {
+  display: table;
+  clear: both;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto 0px auto 0px;
+}
+
+@media (max-width: 850px) {
+  .grid-container { grid-template-columns: repeat(1, 1fr); }
+}
