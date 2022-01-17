@@ -55,7 +55,7 @@ export class BoardComponent implements OnInit {
     }
   }
 
-  public moveCallback(move: MoveChange): void {
+  moveCallback(move: MoveChange): void {
     const fen = this.board?.getFEN();
     this.sendBoardData(fen, move);
   }
