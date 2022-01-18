@@ -49,11 +49,17 @@ export class BoardComponent implements OnInit {
     if (move.checkmate) {
       this.gameFinished = true;
       alert('checkmate');
+      if (window.confirm('checkmate, start a new game ?')) {
+        this.startAnewGame();
+      }
     }
     if (move.stalemate) {
       this.gameFinished = true;
-      alert('stalemate');
+      if (window.confirm('stalemate, start a new game ?')) {
+        this.startAnewGame();
+      }
     }
+    this.gameFinished = false;
     window?.top?.postMessage({ fen: fen, sendTo: sendTo, move: move });
   }
 
@@ -66,13 +72,17 @@ export class BoardComponent implements OnInit {
     }
   }
 
+  clickStartAnewGameButton() {
+    if (window.confirm('Do you really want to reset?')) {
+      this.startAnewGame();
+    }
+  }
+
   startAnewGame() {
     let sendTo = this.getColorToSendTo();
 
-    if (window.confirm('Do you really want to reset?')) {
-      window?.top?.postMessage({ reset: true, sendTo });
-      this.resetGame();
-    }
+    window?.top?.postMessage({ reset: true, sendTo });
+    this.resetGame();
   }
 
   @HostListener('window:message', ['$event'])
@@ -87,8 +97,6 @@ export class BoardComponent implements OnInit {
     if (event.data.move) {
       this.board?.move(event.data.move.move);
     }
-
-    console.log(event.data.reset);
   }
 
   moveCallback(move: MoveChange): void {
