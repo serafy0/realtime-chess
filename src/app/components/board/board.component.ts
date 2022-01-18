@@ -3,13 +3,11 @@ import {
   HostListener,
   Input,
   OnInit,
-  Output,
   ViewChild,
 } from '@angular/core';
 
 import {
   MoveChange,
-  NgxChessBoardComponent,
   NgxChessBoardService,
   NgxChessBoardView,
 } from 'ngx-chess-board';
@@ -38,11 +36,16 @@ export class BoardComponent implements OnInit {
     }
   }
 
-  sendBoardData(fen: string | undefined, move: MoveChange): void {
+  getColorToSendTo(): string {
     let sendTo = 'white';
     if (this.darkDisabled) {
       sendTo = 'dark';
     }
+    return sendTo;
+  }
+
+  sendBoardData(fen: string | undefined, move: MoveChange): void {
+    let sendTo = this.getColorToSendTo();
     if (move.checkmate) {
       this.gameFinished = true;
       alert('checkmate');
@@ -53,8 +56,23 @@ export class BoardComponent implements OnInit {
     }
     window?.top?.postMessage({ fen: fen, sendTo: sendTo, move: move });
   }
+
+  resetGame() {
+    let sendTo = this.getColorToSendTo();
+
+    this.board?.reset();
+    if (sendTo === 'white') {
+      this.board?.reverse();
+    }
+  }
+
   startAnewGame() {
-    window?.top?.postMessage({ reset: true });
+    let sendTo = this.getColorToSendTo();
+
+    if (window.confirm('Do you really want to reset?')) {
+      window?.top?.postMessage({ reset: true, sendTo });
+      this.resetGame();
+    }
   }
 
   @HostListener('window:message', ['$event'])
@@ -62,9 +80,15 @@ export class BoardComponent implements OnInit {
     if (event.origin !== origin) {
       return;
     }
-    if (event.data) {
+    if (event.data.reset) {
+      this.resetGame();
+    }
+
+    if (event.data.move) {
       this.board?.move(event.data.move.move);
     }
+
+    console.log(event.data.reset);
   }
 
   moveCallback(move: MoveChange): void {

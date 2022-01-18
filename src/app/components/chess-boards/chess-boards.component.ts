@@ -24,10 +24,22 @@ export class ChessBoardsComponent implements OnInit {
       this.url + `/${color}`
     );
   }
+  resetBoardOfChild(color: string) {
+    const myIframe: HTMLIFrameElement = document.getElementById(
+      color
+    ) as HTMLIFrameElement;
+    myIframe?.contentWindow?.postMessage(
+      { reset: true },
+      this.url + `/${color}`
+    );
+  }
   @HostListener('window:message', ['$event'])
   onMessage(event: any) {
     if (event.data) {
       this.sendNewBoardDataToChild(event.data.sendTo, event.data.move);
+    }
+    if (event.data.reset) {
+      this.resetBoardOfChild(event.data.sendTo);
     }
   }
 
