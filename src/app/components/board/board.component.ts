@@ -46,6 +46,9 @@ export class BoardComponent implements OnInit {
 
   sendBoardData(fen: string | undefined, move: MoveChange): void {
     let sendTo = this.getColorToSendTo();
+    this.gameFinished = false;
+    window?.top?.postMessage({ fen: fen, sendTo: sendTo, move: move });
+
     if (move.checkmate) {
       this.gameFinished = true;
       alert('checkmate');
@@ -59,8 +62,6 @@ export class BoardComponent implements OnInit {
         this.startAnewGame();
       }
     }
-    this.gameFinished = false;
-    window?.top?.postMessage({ fen: fen, sendTo: sendTo, move: move });
   }
 
   resetGame() {
