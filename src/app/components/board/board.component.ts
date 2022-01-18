@@ -27,6 +27,7 @@ export class BoardComponent implements OnInit {
   @Input() darkDisabled = true;
   @Input() reversed = false;
   @Input() shouldBeReversed = false;
+  @Input() gameFinished = false;
 
   checkIfCorrectlyReversed(): void {
     if (!this.reversed && this.shouldBeReversed) {
@@ -42,7 +43,18 @@ export class BoardComponent implements OnInit {
     if (this.darkDisabled) {
       sendTo = 'dark';
     }
+    if (move.checkmate) {
+      this.gameFinished = true;
+      alert('checkmate');
+    }
+    if (move.stalemate) {
+      this.gameFinished = true;
+      alert('stalemate');
+    }
     window?.top?.postMessage({ fen: fen, sendTo: sendTo, move: move });
+  }
+  startAnewGame() {
+    window?.top?.postMessage({ reset: true });
   }
 
   @HostListener('window:message', ['$event'])
@@ -84,6 +96,8 @@ export class BoardComponent implements OnInit {
 
   @HostListener('window:beforeunload')
   async ngOnDestroy() {
-    localStorage.setItem('currentFEN', <string>this.board?.getFEN());
+    if (!this.gameFinished) {
+      localStorage.setItem('currentFEN', <string>this.board?.getFEN());
+    }
   }
 }
