@@ -51,7 +51,6 @@ export class BoardComponent implements OnInit {
 
     if (move.checkmate) {
       this.gameFinished = true;
-      alert('checkmate');
       if (window.confirm('checkmate, start a new game ?')) {
         this.startAnewGame();
       }
