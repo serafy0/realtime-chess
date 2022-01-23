@@ -48,19 +48,6 @@ export class BoardComponent implements OnInit {
     let sendTo = this.getColorToSendTo();
     this.gameFinished = false;
     window?.top?.postMessage({ fen: fen, sendTo: sendTo, move: move });
-
-    if (move.checkmate) {
-      this.gameFinished = true;
-      if (window.confirm('checkmate, start a new game ?')) {
-        this.startAnewGame();
-      }
-    }
-    if (move.stalemate) {
-      this.gameFinished = true;
-      if (window.confirm('stalemate, start a new game ?')) {
-        this.startAnewGame();
-      }
-    }
   }
 
   resetGame() {
@@ -96,6 +83,18 @@ export class BoardComponent implements OnInit {
 
     if (event.data.move) {
       this.board?.move(event.data.move.move);
+    }
+    if (event.data.move.checkmate) {
+      this.gameFinished = true;
+      if (window.confirm('checkmate, start a new game ?')) {
+        this.startAnewGame();
+      }
+    }
+    if (event.data.move.stalemate) {
+      this.gameFinished = true;
+      if (window.confirm('stalemate, start a new game ?')) {
+        this.startAnewGame();
+      }
     }
   }
 
