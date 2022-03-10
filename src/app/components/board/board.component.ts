@@ -77,20 +77,20 @@ export class BoardComponent implements OnInit {
     if (event.origin !== origin) {
       return;
     }
-    if (event.data.reset) {
+    if (event.data?.reset) {
       this.resetGame();
     }
 
-    if (event.data.move) {
+    if (event.data?.move) {
       this.board?.move(event.data.move.move);
     }
-    if (event.data.move.checkmate) {
+    if (event.data?.move?.checkmate) {
       this.gameFinished = true;
       if (window.confirm('checkmate, start a new game ?')) {
         this.startAnewGame();
       }
     }
-    if (event.data.move.stalemate) {
+    if (event.data?.move?.stalemate) {
       this.gameFinished = true;
       if (window.confirm('stalemate, start a new game ?')) {
         this.startAnewGame();
