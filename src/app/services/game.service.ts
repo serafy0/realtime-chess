@@ -18,10 +18,9 @@ export class GameService {
     this.allGames = db.list('games').snapshotChanges();
   }
 
-  public createNewGame() {
+  public createNewGame(name: string) {
     this.games.push({
-      name: 'new',
-      FEN: '',
+      name: name,
     });
   }
   public deleteGame(id: any) {
