@@ -1,0 +1,17 @@
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/sakura.css/css/sakura.css"
+  type="text/css"
+/>
+
+<button [routerLink]="['/board']">playground</button>
+
+<button (click)="createNewGame()">create new online game</button>
+
+<ul>
+  <li class="text" *ngFor="let item of allGames | async">
+    {{ item.key }}
+    <button (click)="deleteGame(item.key)">delete</button>
+    <button [routerLink]="['/online-game']">play</button>
+  </li>
+</ul>
