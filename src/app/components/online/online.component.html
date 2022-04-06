@@ -1,0 +1,10 @@
+<p *ngIf="!darkDisabled">you are black</p>
+<p *ngIf="!lightDisabled">you are white</p>
+<p>
+  <ngx-chess-board
+    #board
+    [lightDisabled]="lightDisabled"
+    [darkDisabled]="darkDisabled"
+    (moveChange)="moveCallback($event)"
+  ></ngx-chess-board>
+</p>
