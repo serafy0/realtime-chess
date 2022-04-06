@@ -19,7 +19,7 @@ export class GameService {
   }
 
   public createNewGame(name: string) {
-    this.games.push({
+    return this.games.push({
       name: name,
     });
   }
