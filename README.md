@@ -2,6 +2,17 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.1.2.
 
+
+## Demo
+https://chess-6a707.web.app/home
+
+you can start an online game from [`/home`](https://chess-6a707.web.app/home) or test it out between two iframes in [`/board`](https://chess-6a707.web.app/board)
+
+
+https://user-images.githubusercontent.com/29197126/229416136-b0d4d5e6-f1fa-4aac-8ca4-cb862a152d72.mov
+
+
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
